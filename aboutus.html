@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .section {
+            padding: 40px 0;
+            margin: 20px 0;
+        }
+        .team-member {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        .contact-info {
+            background: #2a5298;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        .active {
+            background: #e8e9ea;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="element.js"></script>
+    <script>
+        // 使用 refData 创建响应式数据
+        const data = refData({
+            company: {
+                name: "关于我们",
+                slogan: "致力于为客户提供最优质的服务和解决方案",
+                intro: "我们是一家充满活力和创新精神的科技公司，成立于2023年。我们的使命是通过技术创新为客户创造价值，推动行业发展。"
+            },
+            team: [
+                {
+                    name: "张三",
+                    position: "首席执行官",
+                    description: "拥有15年技术和管理经验，曾在多家知名科技公司担任领导职务。"
+                },
+                {
+                    name: "李四",
+                    position: "技术总监",
+                    description: "专注于人工智能和大数据领域，带领团队完成多个重要项目。"
+                }
+            ],
+            contactWay: {
+                address: "北京市朝阳区科技园区88号",
+                phone: "010-88888888",
+                email: "contact@company.com"
+            }
+        });
+
+        // 创建页头
+        const header = html.div()
+            .addId('header')
+            .addClass('header')
+            .append(
+                html.h1(data.company.name)
+                    .style({
+                        fontSize: '2.5em',
+                        marginBottom: '20px'
+                    })
+            )
+            .append(
+                html.p(data.company.slogan)
+                    .style({
+                        fontSize: '1.2em',
+                        opacity: '0.9'
+                    })
+            );
+
+        // 创建公司简介部分
+        const aboutSection = html.div()
+            .addId('about-section')
+            .addClass('section')
+            .style({
+                maxWidth: '800px',
+                margin: '0 auto',
+                padding: '0 20px'
+            })
+            .append(
+                html.h2("公司简介")
+                    .style({
+                        color: '#1e3c72',
+                        marginBottom: '20px'
+                    })
+            )
+            .append(
+                html.p(data.company.intro)
+                    .style({
+                        marginBottom: '20px'
+                    })
+            );
+
+        // 创建团队成员部分
+        const teamSection = html.div()
+            .addId('team-section')
+            .addClass('section')
+            .style({
+                maxWidth: '800px',
+                margin: '0 auto',
+                padding: '0 20px'
+            })
+            .append(
+                html.h2("我们的团队")
+                    .style({
+                        color: '#1e3c72',
+                        marginBottom: '30px'
+                    })
+            );
+
+        // 添加团队成员
+        data.team.forEach((member, index) => {
+            teamSection.append(
+                html.div()
+                    .addClass('team-member')
+                    .onclick(function() {
+                        this.siblings().forEach(sibling => {
+                            sibling.removeClass('active');
+                        });
+                        this.addClass('active');
+                    })
+                    .append(
+                        html.h3(member.name)
+                            .style({
+                                color: '#1e3c72',
+                                marginBottom: '10px'
+                            })
+                    )
+                    .append(
+                        html.p(member.position)
+                            .style({
+                                color: '#666',
+                                fontStyle: 'italic',
+                                marginBottom: '10px'
+                            })
+                    )
+                    .append(
+                        html.p(member.description)
+                    )
+            );
+        });
+        console.log(data.contactWay);
+        // 创建联系信息部分
+        const contactSection = html.div()
+            .addId('contact-section')
+            .addClass('section', 'contact-info')
+            .style({
+                maxWidth: '800px',
+                margin: '40px auto',
+                padding: '0 20px'
+            })
+            .append(
+                html.h2("联系我们")
+                    .style({
+                        marginBottom: '20px'
+                    })
+            )
+            .append(
+                html.p(`地址：${data.contactWay.address}`)
+                    .style({
+                        marginBottom: '10px'
+                    })
+            )
+            .append(
+                html.p(`电话：${data.contactWay.phone}`)
+                    .style({
+                        marginBottom: '10px'
+                    })
+            )
+            .append(
+                html.p("邮箱：" + data.contactWay.email)
+            );
+
+        // 渲染所有部分
+        render([header, aboutSection, teamSection, contactSection]);
+    </script>
+</body>
+</html> 

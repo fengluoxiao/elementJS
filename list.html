@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .orange { color: orange; }
+        .active { color: purple; }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="element.js"></script>
+    <script>
+        const data = refData({ 
+            title: '第一个元素', 
+            button: '点击我',
+            list: ['item1', 'item2', 'item3']
+        });
+        
+        html.h1(data.title)
+        .onclick(function() {
+            data.title = '元素被更改';
+        }).render('#app');
+        html.br().render('#app');
+        html.h1(data.title)
+        .onclick(function() {
+            data.title = '元素被更改';
+        }).render('#app');
+
+        // 第一个列表
+        var node3 = html.ul()
+            .append(data.list.map((item, index) => 
+                html.li(data.list[index])
+                    .oncontextmenu(function() {
+                        this.siblings().forEach(sibling => {
+                            sibling.removeClass('active');
+                        });
+                        this.addClass('active');
+                        data.list[index] = 'item' + index + ' 被点击了';  // 直接修改数据
+                    })
+            ))
+            .render('#app');
+
+        html.br().render('#app');
+
+      
+    </script>
+</body>
+</html>
