@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="element.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // 文本
+        html.text('这是一个文本').render('#app');
+        // 段落
+        html.p('这是一个段落').render('#app');
+        // 标题
+        html.h1('这是一个标题').render('#app');
+
+        html.hr().render('#app');
+
+        // 加粗文本
+        html.span('这是一个文本', 'b').render('#app');
+        // 斜体段落
+        html.p('这是一个段落', 'i').render('#app');
+        // 删除线标题
+        html.h1('这是一个标题', 's').render('#app');
+    </script>
+</body>
+</html>
