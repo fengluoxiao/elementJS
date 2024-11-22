@@ -9,10 +9,16 @@
     <div id="app"></div>
     <script src="element.js"></script>
     <script>
-        html.h1('这是一个标题').render('#app');
-        html.br().render('#app');
+        html.h1('这是一个标题')
+            .render('#app');
+        html.br()
+            .render('#app');
         html.a('这是一个链接')
             .href('https://www.baidu.com')
+            .onclick(function(event) {
+                event.preventDefault();
+                alert('这是一个链接：' + this.element.getAttribute('href'));
+            })
             .render('#app');
     </script>
 </body>

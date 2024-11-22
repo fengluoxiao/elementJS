@@ -525,6 +525,11 @@ class Element {
     }
     return this;
   }
+
+  href(url) {
+    this.element.setAttribute('href', url);
+    return this;
+  }
 }
 
 const html = new Proxy({}, {
