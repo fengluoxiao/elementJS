@@ -1,11 +1,31 @@
 class Element {
   constructor(tag, textStyle) {
     this.element = document.createElement(tag);
+    
+    // 处理文本样式
     if (textStyle) {
-      const styleElement = document.createElement(textStyle);
-      this.element.appendChild(styleElement);
-      this._styleElement = styleElement;
+      if (Array.isArray(textStyle)) {
+        // 创建一个文本节点
+        const textNode = document.createTextNode('');
+        this._styleElement = textNode;
+        
+        // 从内到外嵌套样式标签
+        let currentElement = textNode;
+        textStyle.forEach(style => {
+          const styleElement = document.createElement(style);
+          styleElement.appendChild(currentElement);
+          currentElement = styleElement;
+        });
+        
+        this.element.appendChild(currentElement);
+      } else {
+        // 单个样式的处理
+        const styleElement = document.createElement(textStyle);
+        this.element.appendChild(styleElement);
+        this._styleElement = styleElement;
+      }
     }
+
     this.isRendered = false;
     this._data = null;
     this._key = null;
