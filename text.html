@@ -9,21 +9,20 @@
 <body>
     <div id="app"></div>
     <script>
-        // 文本
-        html.text('这是一个文本').render('#app');
-        // 段落
-        html.p('这是一个段落').render('#app');
-        // 标题
-        html.h1('这是一个标题').render('#app');
+        // 创建所有要显示的元素
+        const elements = [
+            html.text('这是一个文本'),
+            html.p('这是一个段落'),
+            html.h1('这是一个标题'),
+            html.hr(),
+            html.span('这是一个文本', 'b'),
+            html.p('这是一个段落', 'i'),
+            html.h1('这是一个标题', 's'),
+            html.text('这是一个标题', 'u')
+        ];
 
-        html.hr().render('#app');
-
-        // 加粗文本
-        html.span('这是一个文本', 'b').render('#app');
-        // 斜体段落
-        html.p('这是一个段落', 'i').render('#app');
-        // 删除线标题
-        html.h1('这是一个标题', 's').render('#app');
+        // 一次性渲染所有元素
+        render(elements, '#app');
     </script>
 </body>
 </html>

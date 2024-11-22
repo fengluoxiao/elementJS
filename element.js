@@ -1,6 +1,11 @@
 class Element {
-  constructor(tag) {
+  constructor(tag, textStyle) {
     this.element = document.createElement(tag);
+    if (textStyle) {
+      const styleElement = document.createElement(textStyle);
+      this.element.appendChild(styleElement);
+      this._styleElement = styleElement;
+    }
     this.isRendered = false;
     this._data = null;
     this._key = null;
@@ -21,13 +26,17 @@ class Element {
       if (content && content.__isDataBinding) {
         this._data = content.__data;
         this._key = content.__key;
-        if (this.element.tagName.toLowerCase() === 'input') {
+        if (this._styleElement) {
+          this._styleElement.textContent = this._data[this._key];
+        } else if (this.element.tagName.toLowerCase() === 'input') {
           this.element.value = this._data[this._key];
         } else {
           this.element.textContent = this._data[this._key];
         }
       } else {
-        if (this.element.tagName.toLowerCase() === 'input') {
+        if (this._styleElement) {
+          this._styleElement.textContent = content;
+        } else if (this.element.tagName.toLowerCase() === 'input') {
           this.element.value = content;
         } else {
           this.element.textContent = content;
@@ -593,7 +602,7 @@ class Element {
 
 const html = new Proxy({}, {
   get: (target, tag) => (...args) => {
-    const el = new Element(tag);
+    const el = new Element(tag, args[1]);
     if (args.length > 0) {
       if (typeof args[0] === 'object' && args[0] !== null) {
         const value = args[0];
