@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="element.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        var data = refData({
+            result: {}
+        });
+        html.form()
+            .method('post')
+            .action('#')
+            .append(
+                html.input()
+                .attr({
+                    type: 'text',
+                    placeholder: '请输入账号',
+                    name: 'username'
+                }),
+                html.input()
+                .attr({
+                    type: 'password',
+                    placeholder: '请输入密码',
+                    name: 'password'
+                }),
+                html.button('提交')
+                    .attr('type', 'submit')
+            ).onSubmit((event) => {
+                console.log(event.submit.datas);
+            })
+            .render('#app');
+    </script>
+</body>
+</html>

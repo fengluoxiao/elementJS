@@ -217,22 +217,22 @@ class Element {
     return this;
   }
 
-  append(children) {
-    if (children instanceof Element) {
-      this.element.appendChild(children.element);
-      return this;
-    }
-
-    if (typeof children === 'object') {
-      Object.values(children).forEach(child => {
-        if (child instanceof Element) {
-          this.element.appendChild(child.element);
-        } else {
-          this.element.appendChild(child);
-        }
-      });
-    }
-    
+  append(...children) {
+    children.forEach(child => {
+      if (child instanceof Element) {
+        this.element.appendChild(child.element);
+      } else if (typeof child === 'object' && child !== null) {
+        Object.values(child).forEach(subChild => {
+          if (subChild instanceof Element) {
+            this.element.appendChild(subChild.element);
+          } else {
+            this.element.appendChild(subChild);
+          }
+        });
+      } else {
+        this.element.appendChild(child);
+      }
+    });
     return this;
   }
 
@@ -526,8 +526,67 @@ class Element {
     return this;
   }
 
+  // 删除单独的 href, method, action 方法
+  // 添加统一的属性处理方法
+  setAttr(name, value) {
+    const supportedAttrs = {
+      'a': ['href', 'target', 'rel'],
+      'form': ['method', 'action', 'enctype'],
+      'input': ['type', 'value', 'placeholder', 'name'],
+      'img': ['src', 'alt'],
+      'link': ['rel', 'href', 'type'],
+      'meta': ['name', 'content'],
+      'script': ['src', 'type', 'async', 'defer']
+    };
+
+    const tagName = this.element.tagName.toLowerCase();
+    const supportedAttrList = supportedAttrs[tagName] || [];
+
+    if (supportedAttrList.includes(name)) {
+      this.element.setAttribute(name, value);
+    } else {
+      console.warn(
+        `%c警告: <${tagName}> 元素不支持 ${name} 属性`,
+        'color: #ff9800; font-weight: bold;'
+      );
+    }
+    return this;
+  }
+
+  // 为了保持向后兼容，保留这些方法但使用 setAttr
   href(url) {
-    this.element.setAttribute('href', url);
+    return this.setAttr('href', url);
+  }
+
+  method(type) {
+    return this.setAttr('method', type);
+  }
+
+  action(url) {
+    return this.setAttr('action', url);
+  }
+
+  onSubmit(fn) {
+    this.element.addEventListener('submit', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      // 获取表单中所有带 name 属性的输入元素
+      const formData = new FormData(this.element);
+      const datas = {};
+      
+      // 将 FormData 转换为 JSON 对象
+      formData.forEach((value, key) => {
+        datas[key] = value;
+      });
+      
+      // 将数据添加到 event 对象中
+      event.submit = {
+        datas: datas
+      };
+      
+      fn.call(this, event);
+    });
     return this;
   }
 }
