@@ -113,7 +113,7 @@ class Element {
     }
   }
 
-  onclick(fn) {
+  onClick(fn) {
     const self = this;
     this.element.addEventListener('click', function(event) {
       event.stopPropagation();
