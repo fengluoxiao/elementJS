@@ -353,7 +353,7 @@ class Element {
           }
           throw new Error(
             `不允许多次设置ID！元素已经设置了ID "${this.element.id}"，` +
-            `不能再设置新ID "${id}"。每个元素只能设置一次ID��`
+            `不能再设置新ID "${id}"。每个元素只能设置一次ID`
           );
         }
 
@@ -863,6 +863,99 @@ class Element {
       fn.call(this, event);
     });
     return this;
+  }
+
+  // 添加小写版本的事件处理方法，用于向后兼容
+  onclick(fn) {
+    return this.onClick(fn);
+  }
+
+  onmouseover(fn) {
+    return this.onMouseover(fn);
+  }
+
+  onmouseout(fn) {
+    return this.onMouseout(fn);
+  }
+
+  onmousedown(fn) {
+    return this.onMousedown(fn);
+  }
+
+  onmouseup(fn) {
+    return this.onMouseup(fn);
+  }
+
+  onlongpress(fn, duration) {
+    return this.onLongpress(fn, duration);
+  }
+
+  onmousemove(fn) {
+    return this.onMousemove(fn);
+  }
+
+  oncontextmenu(fn) {
+    return this.onContextmenu(fn);
+  }
+
+  onkeydown(fn) {
+    return this.onKeydown(fn);
+  }
+
+  onkeyup(fn) {
+    return this.onKeyup(fn);
+  }
+
+  onkeypress(fn) {
+    return this.onKeypress(fn);
+  }
+
+  onfocus(fn) {
+    return this.onFocus(fn);
+  }
+
+  onblur(fn) {
+    return this.onBlur(fn);
+  }
+
+  oninput(fn) {
+    return this.onInput(fn);
+  }
+
+  onchange(fn) {
+    return this.onChange(fn);
+  }
+
+  ondblclick(fn) {
+    return this.onDblclick(fn);
+  }
+
+  onwheel(fn) {
+    return this.onWheel(fn);
+  }
+
+  ondrag(fn) {
+    return this.onDrag(fn);
+  }
+
+  ondragstart(fn) {
+    return this.onDragstart(fn);
+  }
+
+  ondragend(fn) {
+    return this.onDragend(fn);
+  }
+
+  ondragover(fn) {
+    return this.onDragover(fn);
+  }
+
+  ondrop(fn) {
+    return this.onDrop(fn);
+  }
+
+  onsubmit(fn) {
+    return this.onSubmit(fn);
   }
 }
 

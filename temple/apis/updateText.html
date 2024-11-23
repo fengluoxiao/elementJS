@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../element.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        var data = refData({
+            title: "使用点击事件更新ref文字",
+        })
+        html.h1("使用点击事件更新文字")
+        .onClick((e) => {
+            console.log(e.value)
+          e.value = "更新文字"
+        })
+        .render('#app')
+        html.h1(data.title)
+        .onClick((e) => {
+            console.log(e.value)
+          e.value = "更新文字"
+        })
+        .render('#app')
+    </script>
+</body>
+</html>
