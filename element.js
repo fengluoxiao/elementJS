@@ -121,6 +121,14 @@ class Element {
         sibling.removeClass('active');
       });
       self.addClass('active');
+      
+      Object.defineProperty(event, 'value', {
+        get: () => self.value(),
+        set: (newValue) => {
+          self.setValue(newValue);
+        }
+      });
+      
       fn.call(self, event);
     });
     return this;
@@ -345,7 +353,7 @@ class Element {
           }
           throw new Error(
             `不允许多次设置ID！元素已经设置了ID "${this.element.id}"，` +
-            `不能再设置新ID "${id}"。每个元素只能设置一次ID。`
+            `不能再设置新ID "${id}"。每个元素只能设置一次ID��`
           );
         }
 
@@ -389,55 +397,81 @@ class Element {
     }
   }
 
-  onmouseover(fn) {
+  onMouseover(fn) {
     this.element.addEventListener('mouseover', (event) => {
       event.stopPropagation();
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
       this.addClass('active');
+      
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      
       fn.call(this, event);
     });
     return this;
   }
 
-  onmouseout(fn) {
+  onMouseout(fn) {
     this.element.addEventListener('mouseout', (event) => {
       event.stopPropagation();
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
       this.addClass('active');
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
   }
 
-  onmousedown(fn) {
+  onMousedown(fn) {
     this.element.addEventListener('mousedown', (event) => {
       event.stopPropagation();
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
       this.addClass('active');
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
   }
 
-  onmouseup(fn) {
+  onMouseup(fn) {
     this.element.addEventListener('mouseup', (event) => {
       event.stopPropagation();
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
       this.addClass('active');
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
   }
 
-  onlongpress(fn, duration = 500) {
+  onLongpress(fn, duration = 500) {
     this.element.addEventListener('mousedown', (event) => {
       event.stopPropagation();
       this._pressTimer = setTimeout(() => {
@@ -445,17 +479,21 @@ class Element {
           sibling.removeClass('active');
         });
         this.addClass('active');
+        Object.defineProperty(event, 'value', {
+          get: () => this.value(),
+          set: (newValue) => {
+            this.setValue(newValue);
+          }
+        });
         fn.call(this, event);
       }, duration);
     });
 
-    this.element.addEventListener('mouseup', (event) => {
-      event.stopPropagation();
+    this.element.addEventListener('mouseup', () => {
       clearTimeout(this._pressTimer);
     });
 
-    this.element.addEventListener('mouseout', (event) => {
-      event.stopPropagation();
+    this.element.addEventListener('mouseout', () => {
       clearTimeout(this._pressTimer);
     });
 
@@ -484,32 +522,40 @@ class Element {
     return this;
   }
 
-  // 添加 onmousemove 方法
-  onmousemove(fn) {
+  // 添加 onMousemove 方法
+  onMousemove(fn) {
     this.element.addEventListener('mousemove', (event) => {
       event.stopPropagation();
-      // 移除兄弟元素的 active 类
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
-      // 给当前元素添加 active 类
       this.addClass('active');
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
   }
 
-  // 添加鼠标右击事件
-  oncontextmenu(fn) {
+  // 添加 onContextmenu 方法
+  onContextmenu(fn) {
     this.element.addEventListener('contextmenu', (event) => {
-      event.preventDefault();  // 阻止默认的右键菜单
+      event.preventDefault();
       event.stopPropagation();
-      // 移除兄弟元素的 active 类
       this.siblings().forEach(sibling => {
         sibling.removeClass('active');
       });
-      // 给当前元素添加 active 类
       this.addClass('active');
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
@@ -600,20 +646,220 @@ class Element {
       event.preventDefault();
       event.stopPropagation();
       
-      // 获取表单中所有带 name 属性的输入元素
       const formData = new FormData(this.element);
       const datas = {};
       
-      // 将 FormData 转换为 JSON 对象
       formData.forEach((value, key) => {
         datas[key] = value;
       });
       
-      // 将数据添加到 event 对象中
       event.submit = {
         datas: datas
       };
+      event.value = this.value();
       
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 键盘事件
+  onKeydown(fn) {
+    this.element.addEventListener('keydown', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onKeyup(fn) {
+    this.element.addEventListener('keyup', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onKeypress(fn) {
+    this.element.addEventListener('keypress', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 焦点事件
+  onFocus(fn) {
+    this.element.addEventListener('focus', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onBlur(fn) {
+    this.element.addEventListener('blur', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 输入事件
+  onInput(fn) {
+    this.element.addEventListener('input', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onChange(fn) {
+    this.element.addEventListener('change', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 双击事件
+  onDblclick(fn) {
+    this.element.addEventListener('dblclick', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 滚轮事件
+  onWheel(fn) {
+    this.element.addEventListener('wheel', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  // 拖拽相关事件
+  onDrag(fn) {
+    this.element.addEventListener('drag', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onDragstart(fn) {
+    this.element.addEventListener('dragstart', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onDragend(fn) {
+    this.element.addEventListener('dragend', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onDragover(fn) {
+    this.element.addEventListener('dragover', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
+      fn.call(this, event);
+    });
+    return this;
+  }
+
+  onDrop(fn) {
+    this.element.addEventListener('drop', (event) => {
+      event.stopPropagation();
+      Object.defineProperty(event, 'value', {
+        get: () => this.value(),
+        set: (newValue) => {
+          this.setValue(newValue);
+        }
+      });
       fn.call(this, event);
     });
     return this;
